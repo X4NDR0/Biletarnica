@@ -1,4 +1,4 @@
-﻿using System;
+﻿using Biletarnica.Services;
 
 namespace Biletarnica
 {
@@ -6,7 +6,8 @@ namespace Biletarnica
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            BiletarnicaService bs = new BiletarnicaService();
+            bs.Menu();
         }
     }
 }
