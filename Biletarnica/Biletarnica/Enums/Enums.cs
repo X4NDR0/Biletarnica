@@ -1,5 +1,8 @@
 ﻿namespace Biletarnica.Enums
 {
+    /// <summary>
+    /// Representing enum for menu options
+    /// </summary>
     enum Options
     {
         prikazEntiteta = 1,

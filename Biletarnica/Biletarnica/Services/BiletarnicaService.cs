@@ -1,5 +1,6 @@
 ﻿using Biletarnica.Enums;
 using Biletarnica.Models;
+using Biletarnica.Utils;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -7,13 +8,24 @@ using System.Linq;
 
 namespace Biletarnica.Services
 {
+    /// <summary>
+    /// Representing class of the Biletarnica
+    /// </summary>
     class BiletarnicaService
     {
         Options opcije;
         private static List<Dogadjaj> listaDogadjaja = new List<Dogadjaj>();
         private static List<Ulaznica> listaUlaznica = new List<Ulaznica>();
         private static List<Osoba> listaOsoba = new List<Osoba>();
+
+        /// <summary>
+        /// Representing data location for Save/Load data
+        /// </summary>
         public static string lokacije = Path.GetFullPath(Path.Combine(Directory.GetCurrentDirectory(), @"../../../"));
+
+        /// <summary>
+        /// Method which write all menu options
+        /// </summary>
         public void MenuText()
         {
             Console.WriteLine("=====================");
@@ -39,6 +51,9 @@ namespace Biletarnica.Services
             Console.Write("Option:");
         }
 
+        /// <summary>
+        /// Method which write all "muzicke dogadjaje"
+        /// </summary>
         public void WriteMuzickeDogadjaje()
         {
             foreach (Dogadjaj dogadjaj in listaDogadjaja)
@@ -46,12 +61,14 @@ namespace Biletarnica.Services
                 if (dogadjaj is MuzickiDogadjaj)
                 {
                     MuzickiDogadjaj muzickiDogadjaj = dogadjaj as MuzickiDogadjaj;
-                    Console.WriteLine("ID:" + muzickiDogadjaj.ID + " Vreme:" + muzickiDogadjaj.Vreme + " Mesto:" + muzickiDogadjaj.Mesto + " Izvodjac:" + muzickiDogadjaj.Izvodjac + " Zanr:" + muzickiDogadjaj.Zanr);
-
+                    Console.WriteLine("ID:" + muzickiDogadjaj.ID + " Vreme:" + muzickiDogadjaj.Vreme.ToString("dd/MM/yyyy") + " Mesto:" + muzickiDogadjaj.Mesto + " Izvodjac:" + muzickiDogadjaj.Izvodjac + " Zanr:" + muzickiDogadjaj.Zanr + " Broj Ulaznica:" + muzickiDogadjaj.BrojUlaznica);
                 }
             }
         }
 
+        /// <summary>
+        /// Method which write all "sportske dogadjaje"
+        /// </summary>
         public void WriteSportskeDogadjaje()
         {
             foreach (Dogadjaj dogadjaj in listaDogadjaja)
@@ -59,42 +76,117 @@ namespace Biletarnica.Services
                 if (dogadjaj is SportskiDogadjaj)
                 {
                     SportskiDogadjaj sportskiDogadjaj = dogadjaj as SportskiDogadjaj;
-                    Console.WriteLine("ID:" + sportskiDogadjaj.ID + " Vreme:" + sportskiDogadjaj.Vreme + " Mesto:" + sportskiDogadjaj.Mesto + " Sport:" + sportskiDogadjaj.Sport);
+                    Console.WriteLine("ID:" + sportskiDogadjaj.ID + " Vreme:" + sportskiDogadjaj.Vreme.ToString("dd/MM/yyyy") + " Mesto:" + sportskiDogadjaj.Mesto + " Sport:" + sportskiDogadjaj.Sport + " Broj Ulaznica:" + sportskiDogadjaj.BrojUlaznica);
                 }
             }
         }
 
+        public void WriteSortedTicket()
+        {
+            List<Ulaznica> listaPoCeni = listaUlaznica.OrderBy(x => x.Cena).ToList();
+            foreach (Ulaznica ulaznica in listaPoCeni)
+            {
+                Console.WriteLine("ID:" + ulaznica.ID + " Mesto:" + ulaznica.Mesto + " Vreme:" + ulaznica.Vreme.ToString("dd/MM/yyyy") + " Tip:" + ulaznica.isVip.ToString().ToUpper() + " Cena:{0:0.00}", ulaznica.Cena);
+            }
+        }
+
+        /// <summary>
+        /// Representing method which write all tickets sorted by price
+        /// </summary>
+        public void TicketsSortedByPrice()
+        {
+            List<Ulaznica> sortiranoPoCeni = listaUlaznica.OrderBy(x => x.Cena).ToList();
+            foreach (Ulaznica ulaznica in sortiranoPoCeni)
+            {
+                if (ulaznica.Dogadjaj is MuzickiDogadjaj)
+                {
+                    MuzickiDogadjaj muzickiDogadjaj = ulaznica.Dogadjaj as MuzickiDogadjaj;
+                    Console.WriteLine("ID:" + ulaznica.ID + " Mesto:" + ulaznica.Mesto + " Naziv:" + ulaznica.Dogadjaj.Naziv + " Vreme:" + ulaznica.Vreme.ToString("dd/MM/yyyy") + " Tip:" + ulaznica.isVip.ToString().ToUpper() + " Cena:{0:0.00}" + " Izvodjac:" + muzickiDogadjaj.Izvodjac + " Zanr:" + muzickiDogadjaj.Zanr, ulaznica.Cena);
+                }
+                else if (ulaznica.Dogadjaj is SportskiDogadjaj)
+                {
+                    SportskiDogadjaj sportskiDogadjaj = ulaznica.Dogadjaj as SportskiDogadjaj;
+                    Console.WriteLine("ID:" + ulaznica.ID + " Mesto:" + ulaznica.Mesto + " Naziv:" + ulaznica.Dogadjaj.Naziv + " Vreme:" + ulaznica.Vreme.ToString("dd/MM/yyyy") + " Tip:" + ulaznica.isVip.ToString().ToUpper() + " Cena:{0:0.00}" + " Sport:" + sportskiDogadjaj.Sport, ulaznica.Cena);
+                }
+
+            }
+        }
+
+        /// <summary>
+        /// Representing method which write all tickets by name
+        /// </summary>
+        public void TicketsSortedByName()
+        {
+            List<Ulaznica> sortiranoPoNazivu = listaUlaznica.OrderBy(x => x.Dogadjaj.Naziv).ToList();
+            foreach (Ulaznica ulaznica in sortiranoPoNazivu)
+            {
+                if (ulaznica.Dogadjaj is MuzickiDogadjaj)
+                {
+                    MuzickiDogadjaj muzickiDogadjaj = ulaznica.Dogadjaj as MuzickiDogadjaj;
+                    Console.WriteLine("ID:" + ulaznica.ID + " Mesto:" + ulaznica.Mesto + " Naziv:" + ulaznica.Dogadjaj.Naziv + " Vreme:" + ulaznica.Vreme.ToString("dd/MM/yyyy") + " Tip:" + ulaznica.isVip.ToString().ToUpper() + " Cena:{0:0.00}" + " Izvodjac:" + muzickiDogadjaj.Izvodjac + " Zanr:" + muzickiDogadjaj.Zanr, ulaznica.Cena);
+                }
+                else if (ulaznica.Dogadjaj is SportskiDogadjaj)
+                {
+                    SportskiDogadjaj sportskiDogadjaj = ulaznica.Dogadjaj as SportskiDogadjaj;
+                    Console.WriteLine("ID:" + ulaznica.ID + " Mesto:" + ulaznica.Mesto + " Naziv:" + ulaznica.Dogadjaj.Naziv + " Vreme:" + ulaznica.Vreme.ToString("dd/MM/yyyy") + " Tip:" + ulaznica.isVip.ToString().ToUpper() + " Cena:{0:0.00}" + " Sport:" + sportskiDogadjaj.Sport, ulaznica.Cena);
+                }
+
+            }
+        }
+
+
+
+        /// <summary>
+        /// Method which write all tickets
+        /// </summary>
         public void WriteAllTicket()
+        {
+            Console.WriteLine("1.Sortiraj po ceni");
+            Console.WriteLine("2.Sortiraj po nazivu dogadjaja");
+            Console.Write("Opcija:");
+            int option = Helper.CheckInt();
+
+            switch (option)
+            {
+                case 1:
+                    Console.Clear();
+                    TicketsSortedByPrice();
+                    break;
+
+                case 2:
+                    Console.Clear();
+                    TicketsSortedByName();
+                    break;
+
+                default:
+                    break;
+            }
+
+        }
+
+        /// <summary>
+        /// Method which write all ticket without sort
+        /// </summary>
+        public void WriteTickets()
         {
             foreach (Ulaznica ulaznica in listaUlaznica)
             {
                 if (ulaznica.Dogadjaj is MuzickiDogadjaj)
                 {
                     MuzickiDogadjaj muzickiDogadjaj = ulaznica.Dogadjaj as MuzickiDogadjaj;
-                    if (ulaznica.isVip)
-                    {
-                        Console.WriteLine("ID:" + ulaznica.ID + " Mesto:" + ulaznica.Mesto + " Vreme" + ulaznica.Vreme + " Tip:" + "VIP" + " Cena:{0:0.00}" + " Izvodjac:" + muzickiDogadjaj.Izvodjac + " Zanr:" + muzickiDogadjaj.Zanr, ulaznica.Cena);
-                    }
-                    else
-                    {
-                        Console.WriteLine("ID:" + ulaznica.ID + " Mesto:" + ulaznica.Mesto + " Vreme" + ulaznica.Vreme + " Tip:" + "Obicna" + " Cena:{0:0.00}" + " Izvodjac:" + muzickiDogadjaj.Izvodjac + " Zanr:" + muzickiDogadjaj.Zanr, ulaznica.Cena);
-                    }
+                    Console.WriteLine("ID:" + ulaznica.ID + " Mesto:" + ulaznica.Mesto + " Naziv:" + ulaznica.Dogadjaj.Naziv + " Vreme:" + ulaznica.Vreme.ToString("dd/MM/yyyy") + " Tip:" + ulaznica.isVip.ToString().ToUpper() + " Cena:{0:0.00}" + " Izvodjac:" + muzickiDogadjaj.Izvodjac + " Zanr:" + muzickiDogadjaj.Zanr, ulaznica.Cena);
                 }
                 else if (ulaznica.Dogadjaj is SportskiDogadjaj)
                 {
                     SportskiDogadjaj sportskiDogadjaj = ulaznica.Dogadjaj as SportskiDogadjaj;
-                    if (ulaznica.isVip)
-                    {
-                        Console.WriteLine("ID:" + ulaznica.ID + " Mesto:" + ulaznica.Mesto + " Vreme" + ulaznica.Vreme + " Tip:" + "VIP" + " Cena:{0:0.00}" + " Sport:" + sportskiDogadjaj.Sport, ulaznica.Cena);
-                    }
-                    else
-                    {
-                        Console.WriteLine("ID:" + ulaznica.ID + " Mesto:" + ulaznica.Mesto + " Vreme" + ulaznica.Vreme + " Tip:" + "Obican" + " Cena:{0:0.00}" + " Sport:" + sportskiDogadjaj.Sport, ulaznica.Cena);
-                    }
+                    Console.WriteLine("ID:" + ulaznica.ID + " Mesto:" + ulaznica.Mesto + " Naziv:" + ulaznica.Dogadjaj.Naziv + " Vreme:" + ulaznica.Vreme.ToString("dd/MM/yyyy") + " Tip:" + ulaznica.isVip.ToString().ToUpper() + " Cena:{0:0.00}" + " Sport:" + sportskiDogadjaj.Sport, ulaznica.Cena);
                 }
             }
         }
 
+        /// <summary>
+        /// Method which write all persons
+        /// </summary>
         public void WriteAllPersons()
         {
             foreach (Osoba osoba in listaOsoba)
@@ -103,6 +195,9 @@ namespace Biletarnica.Services
             }
         }
 
+        /// <summary>
+        /// Method used to write all entity
+        /// </summary>
         public void WriteAllEntity()
         {
             Console.WriteLine("1.Ispisi sve muzicke dogadjaje");
@@ -140,31 +235,47 @@ namespace Biletarnica.Services
             }
         }
 
+        /// <summary>
+        /// Representing method for add person
+        /// </summary>
         public void AddPerson()
         {
             Console.Write("Enter a name:");
-            string nameAdd = Console.ReadLine();
+            string nameAdd = Helper.CheckString();
 
             Console.Clear();
 
             Console.Write("Enter a surname:");
-            string surnameAdd = Console.ReadLine();
+            string surnameAdd = Helper.CheckString();
 
             Console.Clear();
 
             Console.Write("Enter a JMBG:");
-            long.TryParse(Console.ReadLine(), out long jmbgAdd);
+            long jmbgAdd = Helper.CheckLong();
 
             Console.Clear();
 
-            Osoba osobaAdd = new Osoba { Ime = nameAdd, Prezime = surnameAdd, JMBG = jmbgAdd };
-            listaOsoba.Add(osobaAdd);
+            if (listaOsoba.Count == 0)
+            {
+                Osoba osobaAdd = new Osoba { ID = 1, Ime = nameAdd, Prezime = surnameAdd, JMBG = jmbgAdd };
+                listaOsoba.Add(osobaAdd);
+            }
+            else
+            {
+                Osoba osobaAdd = new Osoba { ID = listaOsoba.Max(x => x.ID) + 1, Ime = nameAdd, Prezime = surnameAdd, JMBG = jmbgAdd };
+                listaOsoba.Add(osobaAdd);
+            }
+
+            SavePersons();
 
             Console.Clear();
 
             Console.WriteLine("Osoba je uspesno dodata!");
         }
 
+        /// <summary>
+        /// Representing method for add "dogadjaj"
+        /// </summary>
         public void AddDogadjaj()
         {
             Console.WriteLine("1.Dodaj muzicki dogadjaj");
@@ -175,30 +286,42 @@ namespace Biletarnica.Services
             {
                 case 1:
                     Console.Write("Unesite mesto:");
-                    string mestoAdd = Console.ReadLine();
+                    string mestoAdd = Helper.CheckString();
 
                     Console.Clear();
 
                     Console.Write("Unesite vreme:");
-                    DateTime vremeAdd = DateTime.Now;
+                    DateTime vremeAdd = Helper.CheckDateTime();
 
                     Console.Clear();
 
                     Console.Write("Unesite izvodjaca:");
-                    string izvodjacAdd = Console.ReadLine();
+                    string izvodjacAdd = Helper.CheckString();
 
                     Console.Clear();
 
                     Console.Write("Unesite zanr:");
-                    string zanrAdd = Console.ReadLine();
+                    string zanrAdd = Helper.CheckString();
 
                     Console.Clear();
 
-                    MuzickiDogadjaj muzickiDogadjajAdd = new MuzickiDogadjaj { Mesto = mestoAdd, Vreme = vremeAdd, Izvodjac = izvodjacAdd, Zanr = zanrAdd };
+                    Console.Write("Unesite broj ulaznica:");
+                    Int32.TryParse(Console.ReadLine(), out int brojUlaznicaAdd);
 
-                    listaDogadjaja.Add(muzickiDogadjajAdd);
+                    if (listaDogadjaja.Count == 0)
+                    {
+                        MuzickiDogadjaj muzickiDogadjajAdd = new MuzickiDogadjaj { ID = 1, Mesto = mestoAdd, Naziv = "Muzicki", Vreme = vremeAdd, Izvodjac = izvodjacAdd, Zanr = zanrAdd, BrojUlaznica = brojUlaznicaAdd };
+                        listaDogadjaja.Add(muzickiDogadjajAdd);
+                    }
+                    else
+                    {
+                        MuzickiDogadjaj muzickiDogadjajAdd = new MuzickiDogadjaj { ID = listaDogadjaja.Max(x => x.ID) + 1, Mesto = mestoAdd, Naziv = "Muzicki", Vreme = vremeAdd, Izvodjac = izvodjacAdd, Zanr = zanrAdd, BrojUlaznica = brojUlaznicaAdd };
+                        listaDogadjaja.Add(muzickiDogadjajAdd);
+                    }
 
                     Console.Clear();
+
+                    SaveDogadjaje();
 
                     Console.WriteLine("Dogadjaj je uspesno dodat!");
 
@@ -206,25 +329,41 @@ namespace Biletarnica.Services
 
                 case 2:
                     Console.Write("Unesite mesto:");
-                    string mesto = Console.ReadLine();
+                    string mesto = Helper.CheckString();
 
                     Console.Clear();
 
                     Console.Write("Unesite vreme:");
-                    DateTime vreme = DateTime.Now;
+                    DateTime vreme = Helper.CheckDateTime(); ;
 
                     Console.Clear();
 
                     Console.Write("Unesite tip sporta:");
-                    string sport = Console.ReadLine();
+                    string sport = Helper.CheckString();
 
                     Console.Clear();
 
-                    SportskiDogadjaj sportskiDogadjajAdd = new SportskiDogadjaj { Mesto = mesto, Vreme = vreme, Sport = sport };
-
-                    listaDogadjaja.Add(sportskiDogadjajAdd);
+                    Console.Write("Unesite broj ulaznica:");
+                    Int32.TryParse(Console.ReadLine(), out int brojUlaznicaAddd);
 
                     Console.Clear();
+
+                    if (listaDogadjaja.Count == 0)
+                    {
+                        SportskiDogadjaj sportskiDogadjajAdd = new SportskiDogadjaj { ID = 1, Mesto = mesto, Naziv = "Sportski", Vreme = vreme, Sport = sport, BrojUlaznica = brojUlaznicaAddd };
+
+                        listaDogadjaja.Add(sportskiDogadjajAdd);
+                    }
+                    else
+                    {
+                        SportskiDogadjaj sportskiDogadjajAdd = new SportskiDogadjaj { ID = listaDogadjaja.Max(x => x.ID) + 1, Mesto = mesto, Naziv = "Sportski", Vreme = vreme, Sport = sport, BrojUlaznica = brojUlaznicaAddd };
+
+                        listaDogadjaja.Add(sportskiDogadjajAdd);
+                    }
+
+                    Console.Clear();
+
+                    SaveDogadjaje();
 
                     Console.WriteLine("Dogadjaj je uspesno dodat!");
                     break;
@@ -234,41 +373,88 @@ namespace Biletarnica.Services
             }
         }
 
+        /// <summary>
+        /// Representing method for add tickets
+        /// </summary>
         public void AddTicket()
         {
             Console.Write("Unesite mesto:");
-            string mestoAdd = Console.ReadLine();
+            string mestoAdd = Helper.CheckString();
 
             Console.Clear();
 
             Console.Write("Unesite vreme:");
-            DateTime vremeAdd = DateTime.Now;
+            DateTime vremeAdd = Helper.CheckDateTime();
 
             Console.Clear();
 
             Console.Write("Unesite cenu ulaznice:");
-            Double.TryParse(Console.ReadLine(), out double cenaAdd);
+            double cenaAdd = Helper.CheckDouble();
 
             Console.Clear();
 
-            Console.Write("Unesite tip ulaznice(VIP ili Obicna)");
-            string tipUlazniceAdd = Console.ReadLine();
-            tipUlazniceAdd = tipUlazniceAdd.ToLower();
+            TicketType ticketType;
+
+            do
+            {
+                Console.Clear();
+                Console.WriteLine("1.VIP");
+                Console.WriteLine("2.Obicna");
+
+                Console.Write("Unesite tip ulaznice(VIP ili Obicna)");
+                Enum.TryParse(Console.ReadLine(), out ticketType);
+
+            } while (Enum.IsDefined(typeof(TicketType), ticketType) == false);
 
             Console.Clear();
 
+            WriteMuzickeDogadjaje();
+            WriteSportskeDogadjaje();
 
-            Ulaznica ulaznicaAdd = new Ulaznica { ID = 5, Mesto = mestoAdd, Vreme = vremeAdd, Cena = cenaAdd };
-            listaUlaznica.Add(ulaznicaAdd);
-            Console.Clear();
-            Console.WriteLine("Ulaznica je uspesno dodata!");
+            Console.Write("Unesite ID dogadjaja:");
+            int dogadjajID = Helper.CheckInt();
+
+            Dogadjaj dogadjaj = listaDogadjaja.Where(x => x.ID == dogadjajID).FirstOrDefault();
+
+            if (dogadjaj.BrojUlaznica != 0)
+            {
+
+                Dogadjaj dogadjajAdd = listaDogadjaja.Where(x => x.ID == dogadjajID).FirstOrDefault();
+
+                dogadjaj.BrojUlaznica = dogadjaj.BrojUlaznica - 1;
+
+                if (listaUlaznica.Count == 0)
+                {
+                    Ulaznica ulaznicaAdd = new Ulaznica { ID = 1, Mesto = mestoAdd, Vreme = vremeAdd, Cena = cenaAdd, isVip = ticketType, Dogadjaj = dogadjajAdd };
+                    listaUlaznica.Add(ulaznicaAdd);
+                }
+                else
+                {
+                    Ulaznica ulaznicaAdd = new Ulaznica { ID = listaUlaznica.Max(x => x.ID) + 1, Mesto = mestoAdd, Vreme = vremeAdd, Cena = cenaAdd, isVip = ticketType, Dogadjaj = dogadjajAdd };
+                    listaUlaznica.Add(ulaznicaAdd);
+                }
+
+                SaveTickets();
+                SaveDogadjaje();
+
+                Console.Clear();
+                Console.WriteLine("Ulaznica je uspesno dodata!");
+            }
+            else
+            {
+                Console.WriteLine("Dostigli ste maksimum pravljenja ulaznica!");
+            }
         }
 
+
+        /// <summary>
+        /// Representing method for deleting persons
+        /// </summary>
         public void DeletePerson()
         {
             WriteAllPersons();
             Console.Write("Enter a ID:");
-            Int32.TryParse(Console.ReadLine(), out int deleteID);
+            int deleteID = Helper.CheckInt();
 
             Console.Clear();
 
@@ -280,6 +466,7 @@ namespace Biletarnica.Services
 
                 Console.Clear();
                 Console.WriteLine("Osoba je uspesno izbrisana!");
+                SavePersons();
             }
             else
             {
@@ -288,10 +475,16 @@ namespace Biletarnica.Services
             }
         }
 
+        /// <summary>
+        /// Representing method for deleting "dogadjaj"
+        /// </summary>
         public void DeleteDogadjaj()
         {
+            WriteMuzickeDogadjaje();
+            WriteSportskeDogadjaje();
+
             Console.Write("Enter a ID:");
-            Int32.TryParse(Console.ReadLine(), out int idDelete);
+            int idDelete = Helper.CheckInt();
 
             Console.Clear();
 
@@ -301,6 +494,7 @@ namespace Biletarnica.Services
             {
                 listaDogadjaja.Remove(dogadjajDelete);
                 Console.Clear();
+                SaveDogadjaje();
                 Console.WriteLine("Dogadjaj je uspesno izbrisan!");
             }
             else
@@ -310,11 +504,14 @@ namespace Biletarnica.Services
             }
         }
 
+        /// <summary>
+        /// Representing method for deleting ticket
+        /// </summary>
         public void DeleteTicket()
         {
-            WriteAllTicket();
+            WriteTickets();
             Console.Write("Enter a ID:");
-            Int32.TryParse(Console.ReadLine(), out int idDelete);
+            int idDelete = Helper.CheckInt();
 
             Console.Clear();
 
@@ -324,6 +521,7 @@ namespace Biletarnica.Services
             {
                 listaUlaznica.Remove(ulaznicaDelete);
                 Console.Clear();
+                SaveTickets();
                 Console.WriteLine("Ulaznice ja uspesno obrisana!");
             }
             else
@@ -333,6 +531,9 @@ namespace Biletarnica.Services
             }
         }
 
+        /// <summary>
+        /// Representing method for MENU
+        /// </summary>
         public void Menu()
         {
             LoadData();
@@ -409,6 +610,10 @@ namespace Biletarnica.Services
 
             } while (opcije != Options.exit);
         }
+
+        /// <summary>
+        /// Representing method for Load data
+        /// </summary>
         public static void LoadData()
         {
 
@@ -422,24 +627,83 @@ namespace Biletarnica.Services
 
             while ((personLine = personReader.ReadLine()) != null)
             {
-                Osoba osobaLoad = new Osoba(personLine);
-                listaOsoba.Add(osobaLoad);
-            }
-
-            while ((ticketLine = ticketReader.ReadLine()) != null)
-            {
-                Ulaznica ulaznicaLoad = new Ulaznica(ticketLine, listaDogadjaja);
-                listaUlaznica.Add(ulaznicaLoad);
+                if (!string.IsNullOrEmpty(personLine))
+                {
+                    Osoba osobaLoad = new Osoba(personLine);
+                    listaOsoba.Add(osobaLoad);
+                }
             }
 
             while ((dogadjajLine = dogadjajReader.ReadLine()) != null)
             {
-                Dogadjaj dogadjajLoad = new Dogadjaj(dogadjajLine, listaDogadjaja);
-                listaDogadjaja.Add(dogadjajLoad);
+                if (!string.IsNullOrEmpty(dogadjajLine))
+                {
+                    Dogadjaj dogadjajLoad = new Dogadjaj(dogadjajLine, listaDogadjaja);
+                    listaDogadjaja.Add(dogadjajLoad);
+                }
             }
 
+            while ((ticketLine = ticketReader.ReadLine()) != null)
+            {
+                if (!string.IsNullOrEmpty(ticketLine))
+                {
+                    Ulaznica ulaznicaLoad = new Ulaznica(ticketLine, listaDogadjaja);
+                    listaUlaznica.Add(ulaznicaLoad);
+                }
+            }
 
-
+            personReader.Close();
+            ticketReader.Close();
+            dogadjajReader.Close();
         }
+
+        /// <summary>
+        /// Representing method for saving persons
+        /// </summary>
+        public void SavePersons()
+        {
+            StreamWriter sw = new StreamWriter(lokacije + "\\data\\" + "osobe.csv");
+            foreach (Osoba osoba in listaOsoba)
+            {
+                sw.WriteLine(osoba.Save());
+            }
+            sw.Close();
+        }
+
+        /// <summary>
+        /// Representing method for saving tickets
+        /// </summary>
+        public void SaveTickets()
+        {
+            StreamWriter sw = new StreamWriter(lokacije + "\\data\\" + "ulaznice.csv");
+            foreach (Ulaznica ulaznica in listaUlaznica)
+            {
+                sw.WriteLine(ulaznica.Save());
+            }
+            sw.Close();
+        }
+
+        /// <summary>
+        /// Representing method for saving "dogadjaje"
+        /// </summary>
+        public void SaveDogadjaje()
+        {
+            StreamWriter sw = new StreamWriter(lokacije + "\\data\\" + "dogadjaji.csv");
+            foreach (Dogadjaj dogadjaj in listaDogadjaja)
+            {
+                if (dogadjaj is MuzickiDogadjaj)
+                {
+                    MuzickiDogadjaj muzickiDogadjaj = dogadjaj as MuzickiDogadjaj;
+                    sw.WriteLine(muzickiDogadjaj.Save());
+                }
+                else if (dogadjaj is SportskiDogadjaj)
+                {
+                    SportskiDogadjaj sportskiDogadjaj = dogadjaj as SportskiDogadjaj;
+                    sw.WriteLine(sportskiDogadjaj.Save());
+                }
+            }
+            sw.Close();
+        }
+
     }
 }
