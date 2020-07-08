@@ -5,7 +5,7 @@
     /// </summary>
     enum TicketType
     {
-        vip = 1,
-        obicna = 2
+        Vip = 1,
+        Obicna = 2
     }
 }

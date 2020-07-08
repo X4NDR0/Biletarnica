@@ -1,7 +1,2 @@
-1;Beograd;01/01/2020;250;vip;2
-3;Kragujevac;05/01/2020;350;obicna;1
-4;Kragujevac;05/01/2020;850;obicna;1
-5;Kragujevac;05/01/2020;650;vip;1
-6;Kragujevac;05/01/2020;250;obicna;1
-7;Kragujevac;05/01/2020;150;obicna;1
-8;Kragujevac;05/01/2020;450;obicna;1
+1;Beograd;01/01/2020;250;Vip;1;2
+2;Belgrade;01/01/2020;250;Vip;2;3

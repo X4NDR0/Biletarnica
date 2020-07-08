@@ -23,15 +23,17 @@ namespace Biletarnica.Models
         /// </summary>
         /// <param name="line"></param>
         /// <param name="listaDogadjaja"></param>
-        public Ulaznica(string line, List<Dogadjaj> listaDogadjaja)
+        /// <param name="listaOsoba"></param>
+        public Ulaznica(string line, List<Dogadjaj> listaDogadjaja, List<Osoba> listaOsoba)
         {
             string[] podaci = line.Split(';');
             Int32.TryParse(podaci[0], out ID);
             Mesto = podaci[1];
             DateTime.TryParse(podaci[2], out Vreme);
             Double.TryParse(podaci[3], out Cena);
-            Enum.TryParse(podaci[4], out isVip);
+            Enum.TryParse(podaci[4], out VrstaUlaznice);
             Dogadjaj = listaDogadjaja.Where(x => x.ID == Convert.ToInt32(podaci[5])).FirstOrDefault();
+            Osoba = listaOsoba.Where(x => x.ID == Convert.ToInt32(podaci[6])).FirstOrDefault();
         }
 
         /// <summary>
@@ -57,7 +59,7 @@ namespace Biletarnica.Models
         /// <summary>
         /// Representing isVip of the ticket
         /// </summary>
-        public TicketType isVip;
+        public TicketType VrstaUlaznice;
 
         /// <summary>
         /// Representing "dogadjaj" of the ticket
@@ -65,12 +67,17 @@ namespace Biletarnica.Models
         public Dogadjaj Dogadjaj;
 
         /// <summary>
+        /// Representing person of the ticket
+        /// </summary>
+        public Osoba Osoba;
+
+        /// <summary>
         /// Representing method for saving data
         /// </summary>
         /// <returns></returns>
         public string Save()
         {
-            string text = ID + ";" + Mesto + ";" + Vreme.ToString("dd/MM/yyyy") + ";" + Cena.ToString("G7") + ";" + isVip.ToString() + ";" + Dogadjaj.ID;
+            string text = ID + ";" + Mesto + ";" + Vreme.ToString("dd/MM/yyyy") + ";" + Cena.ToString("G7") + ";" + VrstaUlaznice.ToString() + ";" + Dogadjaj.ID + ";" + Osoba.ID;
             return text;
         }
     }

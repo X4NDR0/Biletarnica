@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices.WindowsRuntime;
 
 namespace Biletarnica.Services
 {
@@ -81,15 +82,6 @@ namespace Biletarnica.Services
             }
         }
 
-        public void WriteSortedTicket()
-        {
-            List<Ulaznica> listaPoCeni = listaUlaznica.OrderBy(x => x.Cena).ToList();
-            foreach (Ulaznica ulaznica in listaPoCeni)
-            {
-                Console.WriteLine("ID:" + ulaznica.ID + " Mesto:" + ulaznica.Mesto + " Vreme:" + ulaznica.Vreme.ToString("dd/MM/yyyy") + " Tip:" + ulaznica.isVip.ToString().ToUpper() + " Cena:{0:0.00}", ulaznica.Cena);
-            }
-        }
-
         /// <summary>
         /// Representing method which write all tickets sorted by price
         /// </summary>
@@ -101,12 +93,12 @@ namespace Biletarnica.Services
                 if (ulaznica.Dogadjaj is MuzickiDogadjaj)
                 {
                     MuzickiDogadjaj muzickiDogadjaj = ulaznica.Dogadjaj as MuzickiDogadjaj;
-                    Console.WriteLine("ID:" + ulaznica.ID + " Mesto:" + ulaznica.Mesto + " Naziv:" + ulaznica.Dogadjaj.Naziv + " Vreme:" + ulaznica.Vreme.ToString("dd/MM/yyyy") + " Tip:" + ulaznica.isVip.ToString().ToUpper() + " Cena:{0:0.00}" + " Izvodjac:" + muzickiDogadjaj.Izvodjac + " Zanr:" + muzickiDogadjaj.Zanr, ulaznica.Cena);
+                    Console.WriteLine("ID:" + ulaznica.ID + " Mesto:" + ulaznica.Mesto + " Naziv:" + ulaznica.Dogadjaj.Naziv + " Vreme:" + ulaznica.Vreme.ToString("dd/MM/yyyy") + " Tip:" + ulaznica.VrstaUlaznice.ToString() + " Cena:{0:0.00}" + " Izvodjac:" + muzickiDogadjaj.Izvodjac + " Zanr:" + muzickiDogadjaj.Zanr + " Ime osobe:" + ulaznica.Osoba.Ime + " Prezime osobe:" + ulaznica.Osoba.Prezime, ulaznica.Cena);
                 }
                 else if (ulaznica.Dogadjaj is SportskiDogadjaj)
                 {
                     SportskiDogadjaj sportskiDogadjaj = ulaznica.Dogadjaj as SportskiDogadjaj;
-                    Console.WriteLine("ID:" + ulaznica.ID + " Mesto:" + ulaznica.Mesto + " Naziv:" + ulaznica.Dogadjaj.Naziv + " Vreme:" + ulaznica.Vreme.ToString("dd/MM/yyyy") + " Tip:" + ulaznica.isVip.ToString().ToUpper() + " Cena:{0:0.00}" + " Sport:" + sportskiDogadjaj.Sport, ulaznica.Cena);
+                    Console.WriteLine("ID:" + ulaznica.ID + " Mesto:" + ulaznica.Mesto + " Naziv:" + ulaznica.Dogadjaj.Naziv + " Vreme:" + ulaznica.Vreme.ToString("dd/MM/yyyy") + " Tip:" + ulaznica.VrstaUlaznice.ToString() + " Cena:{0:0.00}" + " Sport:" + sportskiDogadjaj.Sport + " Ime osobe:" + ulaznica.Osoba.Ime + " Prezime osobe:" + ulaznica.Osoba.Prezime, ulaznica.Cena);
                 }
 
             }
@@ -123,12 +115,12 @@ namespace Biletarnica.Services
                 if (ulaznica.Dogadjaj is MuzickiDogadjaj)
                 {
                     MuzickiDogadjaj muzickiDogadjaj = ulaznica.Dogadjaj as MuzickiDogadjaj;
-                    Console.WriteLine("ID:" + ulaznica.ID + " Mesto:" + ulaznica.Mesto + " Naziv:" + ulaznica.Dogadjaj.Naziv + " Vreme:" + ulaznica.Vreme.ToString("dd/MM/yyyy") + " Tip:" + ulaznica.isVip.ToString().ToUpper() + " Cena:{0:0.00}" + " Izvodjac:" + muzickiDogadjaj.Izvodjac + " Zanr:" + muzickiDogadjaj.Zanr, ulaznica.Cena);
+                    Console.WriteLine("ID:" + ulaznica.ID + " Mesto:" + ulaznica.Mesto + " Naziv:" + ulaznica.Dogadjaj.Naziv + " Vreme:" + ulaznica.Vreme.ToString("dd/MM/yyyy") + " Tip:" + ulaznica.VrstaUlaznice.ToString() + " Cena:{0:0.00}" + " Izvodjac:" + muzickiDogadjaj.Izvodjac + " Zanr:" + muzickiDogadjaj.Zanr + " Ime osobe:" + ulaznica.Osoba.Ime + " Prezime osobe:" + ulaznica.Osoba.Prezime, ulaznica.Cena);
                 }
                 else if (ulaznica.Dogadjaj is SportskiDogadjaj)
                 {
                     SportskiDogadjaj sportskiDogadjaj = ulaznica.Dogadjaj as SportskiDogadjaj;
-                    Console.WriteLine("ID:" + ulaznica.ID + " Mesto:" + ulaznica.Mesto + " Naziv:" + ulaznica.Dogadjaj.Naziv + " Vreme:" + ulaznica.Vreme.ToString("dd/MM/yyyy") + " Tip:" + ulaznica.isVip.ToString().ToUpper() + " Cena:{0:0.00}" + " Sport:" + sportskiDogadjaj.Sport, ulaznica.Cena);
+                    Console.WriteLine("ID:" + ulaznica.ID + " Mesto:" + ulaznica.Mesto + " Naziv:" + ulaznica.Dogadjaj.Naziv + " Vreme:" + ulaznica.Vreme.ToString("dd/MM/yyyy") + " Tip:" + ulaznica.VrstaUlaznice.ToString() + " Cena:{0:0.00}" + " Sport:" + sportskiDogadjaj.Sport + " Ime osobe:" + ulaznica.Osoba.Ime + " Prezime osobe:" + ulaznica.Osoba.Prezime, ulaznica.Cena);
                 }
 
             }
@@ -174,12 +166,12 @@ namespace Biletarnica.Services
                 if (ulaznica.Dogadjaj is MuzickiDogadjaj)
                 {
                     MuzickiDogadjaj muzickiDogadjaj = ulaznica.Dogadjaj as MuzickiDogadjaj;
-                    Console.WriteLine("ID:" + ulaznica.ID + " Mesto:" + ulaznica.Mesto + " Naziv:" + ulaznica.Dogadjaj.Naziv + " Vreme:" + ulaznica.Vreme.ToString("dd/MM/yyyy") + " Tip:" + ulaznica.isVip.ToString().ToUpper() + " Cena:{0:0.00}" + " Izvodjac:" + muzickiDogadjaj.Izvodjac + " Zanr:" + muzickiDogadjaj.Zanr, ulaznica.Cena);
+                    Console.WriteLine("ID:" + ulaznica.ID + " Mesto:" + ulaznica.Mesto + " Naziv:" + ulaznica.Dogadjaj.Naziv + " Vreme:" + ulaznica.Vreme.ToString("dd/MM/yyyy") + " Tip:" + ulaznica.VrstaUlaznice.ToString() + " Cena:{0:0.00}" + " Izvodjac:" + muzickiDogadjaj.Izvodjac + " Zanr:" + muzickiDogadjaj.Zanr + " Ime osobe:" + ulaznica.Osoba.Ime + " Prezime osobe:" + ulaznica.Osoba.Prezime, ulaznica.Cena);
                 }
                 else if (ulaznica.Dogadjaj is SportskiDogadjaj)
                 {
                     SportskiDogadjaj sportskiDogadjaj = ulaznica.Dogadjaj as SportskiDogadjaj;
-                    Console.WriteLine("ID:" + ulaznica.ID + " Mesto:" + ulaznica.Mesto + " Naziv:" + ulaznica.Dogadjaj.Naziv + " Vreme:" + ulaznica.Vreme.ToString("dd/MM/yyyy") + " Tip:" + ulaznica.isVip.ToString().ToUpper() + " Cena:{0:0.00}" + " Sport:" + sportskiDogadjaj.Sport, ulaznica.Cena);
+                    Console.WriteLine("ID:" + ulaznica.ID + " Mesto:" + ulaznica.Mesto + " Naziv:" + ulaznica.Dogadjaj.Naziv + " Vreme:" + ulaznica.Vreme.ToString("dd/MM/yyyy") + " Tip:" + ulaznica.VrstaUlaznice.ToString() + " Cena:{0:0.00}" + " Sport:" + sportskiDogadjaj.Sport + " Ime osobe:" + ulaznica.Osoba.Ime + " Prezime osobe:" + ulaznica.Osoba.Prezime, ulaznica.Cena);
                 }
             }
         }
@@ -238,8 +230,11 @@ namespace Biletarnica.Services
         /// <summary>
         /// Representing method for add person
         /// </summary>
-        public void AddPerson()
+        public int AddPerson()
         {
+            Console.Clear();
+
+            int idPersonForTicketCreate = 0;
             Console.Write("Enter a name:");
             string nameAdd = Helper.CheckString();
 
@@ -259,11 +254,13 @@ namespace Biletarnica.Services
             {
                 Osoba osobaAdd = new Osoba { ID = 1, Ime = nameAdd, Prezime = surnameAdd, JMBG = jmbgAdd };
                 listaOsoba.Add(osobaAdd);
+                idPersonForTicketCreate = osobaAdd.ID;
             }
             else
             {
                 Osoba osobaAdd = new Osoba { ID = listaOsoba.Max(x => x.ID) + 1, Ime = nameAdd, Prezime = surnameAdd, JMBG = jmbgAdd };
                 listaOsoba.Add(osobaAdd);
+                idPersonForTicketCreate = osobaAdd.ID;
             }
 
             SavePersons();
@@ -271,13 +268,16 @@ namespace Biletarnica.Services
             Console.Clear();
 
             Console.WriteLine("Osoba je uspesno dodata!");
+
+            return idPersonForTicketCreate;
         }
 
         /// <summary>
         /// Representing method for add "dogadjaj"
         /// </summary>
-        public void AddDogadjaj()
+        public int AddDogadjaj()
         {
+            int idForTicketCreate = 0;
             Console.WriteLine("1.Dodaj muzicki dogadjaj");
             Console.WriteLine("2.Dodaj sportski dogadjaj");
             Console.Write("Option:");
@@ -285,6 +285,8 @@ namespace Biletarnica.Services
             switch (option)
             {
                 case 1:
+                    Console.Clear();
+
                     Console.Write("Unesite mesto:");
                     string mestoAdd = Helper.CheckString();
 
@@ -312,11 +314,13 @@ namespace Biletarnica.Services
                     {
                         MuzickiDogadjaj muzickiDogadjajAdd = new MuzickiDogadjaj { ID = 1, Mesto = mestoAdd, Naziv = "Muzicki", Vreme = vremeAdd, Izvodjac = izvodjacAdd, Zanr = zanrAdd, BrojUlaznica = brojUlaznicaAdd };
                         listaDogadjaja.Add(muzickiDogadjajAdd);
+                        idForTicketCreate = muzickiDogadjajAdd.ID;
                     }
                     else
                     {
                         MuzickiDogadjaj muzickiDogadjajAdd = new MuzickiDogadjaj { ID = listaDogadjaja.Max(x => x.ID) + 1, Mesto = mestoAdd, Naziv = "Muzicki", Vreme = vremeAdd, Izvodjac = izvodjacAdd, Zanr = zanrAdd, BrojUlaznica = brojUlaznicaAdd };
                         listaDogadjaja.Add(muzickiDogadjajAdd);
+                        idForTicketCreate = muzickiDogadjajAdd.ID;
                     }
 
                     Console.Clear();
@@ -324,10 +328,11 @@ namespace Biletarnica.Services
                     SaveDogadjaje();
 
                     Console.WriteLine("Dogadjaj je uspesno dodat!");
-
                     break;
 
                 case 2:
+                    Console.Clear();
+
                     Console.Write("Unesite mesto:");
                     string mesto = Helper.CheckString();
 
@@ -351,14 +356,15 @@ namespace Biletarnica.Services
                     if (listaDogadjaja.Count == 0)
                     {
                         SportskiDogadjaj sportskiDogadjajAdd = new SportskiDogadjaj { ID = 1, Mesto = mesto, Naziv = "Sportski", Vreme = vreme, Sport = sport, BrojUlaznica = brojUlaznicaAddd };
-
                         listaDogadjaja.Add(sportskiDogadjajAdd);
+                        idForTicketCreate = sportskiDogadjajAdd.ID;
                     }
                     else
                     {
                         SportskiDogadjaj sportskiDogadjajAdd = new SportskiDogadjaj { ID = listaDogadjaja.Max(x => x.ID) + 1, Mesto = mesto, Naziv = "Sportski", Vreme = vreme, Sport = sport, BrojUlaznica = brojUlaznicaAddd };
 
                         listaDogadjaja.Add(sportskiDogadjajAdd);
+                        idForTicketCreate = sportskiDogadjajAdd.ID;
                     }
 
                     Console.Clear();
@@ -371,6 +377,7 @@ namespace Biletarnica.Services
                 default:
                     break;
             }
+            return idForTicketCreate;
         }
 
         /// <summary>
@@ -401,7 +408,7 @@ namespace Biletarnica.Services
                 Console.WriteLine("1.VIP");
                 Console.WriteLine("2.Obicna");
 
-                Console.Write("Unesite tip ulaznice(VIP ili Obicna)");
+                Console.Write("Unesite tip ulaznice(VIP ili Obicna):");
                 Enum.TryParse(Console.ReadLine(), out ticketType);
 
             } while (Enum.IsDefined(typeof(TicketType), ticketType) == false);
@@ -411,26 +418,51 @@ namespace Biletarnica.Services
             WriteMuzickeDogadjaje();
             WriteSportskeDogadjaje();
 
-            Console.Write("Unesite ID dogadjaja:");
+            Console.Write("Unesite ID dogadjaja ili unesite 0 za kreiranje novog:");
             int dogadjajID = Helper.CheckInt();
 
-            Dogadjaj dogadjaj = listaDogadjaja.Where(x => x.ID == dogadjajID).FirstOrDefault();
+            Dogadjaj dogadjaj = null;
+
+            if (dogadjajID == 0)
+            {
+                int id = AddDogadjaj();
+                dogadjaj = listaDogadjaja.Where(x => x.ID == id).FirstOrDefault();
+            }
+            else
+            {
+                dogadjaj = listaDogadjaja.Where(x => x.ID == dogadjajID).FirstOrDefault();
+            }
+
+            Console.Clear();
+
+            WriteAllPersons();
+            Console.Write("Unesite ID osobe ili unesite 0 da kreirate novu:");
+            int personID = Helper.CheckInt();
+
+            Osoba osoba = null;
+
+            if (personID == 0)
+            {
+                int id = AddPerson();
+                osoba = listaOsoba.Where(x => x.ID == id).FirstOrDefault();
+            }
+            else
+            {
+                osoba = listaOsoba.Where(x => x.ID == personID).FirstOrDefault();
+            }
 
             if (dogadjaj.BrojUlaznica != 0)
             {
-
-                Dogadjaj dogadjajAdd = listaDogadjaja.Where(x => x.ID == dogadjajID).FirstOrDefault();
-
-                dogadjaj.BrojUlaznica = dogadjaj.BrojUlaznica - 1;
+                dogadjaj.BrojUlaznica -= 1;
 
                 if (listaUlaznica.Count == 0)
                 {
-                    Ulaznica ulaznicaAdd = new Ulaznica { ID = 1, Mesto = mestoAdd, Vreme = vremeAdd, Cena = cenaAdd, isVip = ticketType, Dogadjaj = dogadjajAdd };
+                    Ulaznica ulaznicaAdd = new Ulaznica { ID = 1, Mesto = mestoAdd, Vreme = vremeAdd, Cena = cenaAdd, VrstaUlaznice = ticketType, Dogadjaj = dogadjaj, Osoba = osoba };
                     listaUlaznica.Add(ulaznicaAdd);
                 }
                 else
                 {
-                    Ulaznica ulaznicaAdd = new Ulaznica { ID = listaUlaznica.Max(x => x.ID) + 1, Mesto = mestoAdd, Vreme = vremeAdd, Cena = cenaAdd, isVip = ticketType, Dogadjaj = dogadjajAdd };
+                    Ulaznica ulaznicaAdd = new Ulaznica { ID = listaUlaznica.Max(x => x.ID) + 1, Mesto = mestoAdd, Vreme = vremeAdd, Cena = cenaAdd, VrstaUlaznice = ticketType, Dogadjaj = dogadjaj, Osoba = osoba };
                     listaUlaznica.Add(ulaznicaAdd);
                 }
 
@@ -647,7 +679,7 @@ namespace Biletarnica.Services
             {
                 if (!string.IsNullOrEmpty(ticketLine))
                 {
-                    Ulaznica ulaznicaLoad = new Ulaznica(ticketLine, listaDogadjaja);
+                    Ulaznica ulaznicaLoad = new Ulaznica(ticketLine, listaDogadjaja, listaOsoba);
                     listaUlaznica.Add(ulaznicaLoad);
                 }
             }
