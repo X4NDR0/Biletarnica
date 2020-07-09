@@ -5,7 +5,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
 
 namespace Biletarnica.Services
 {
@@ -198,7 +197,7 @@ namespace Biletarnica.Services
             Console.WriteLine("4.Ispisi sve osobe");
             Console.Write("Option:");
 
-            Int32.TryParse(Console.ReadLine(), out int option);
+            int.TryParse(Console.ReadLine(), out int option);
 
             switch (option)
             {
@@ -281,7 +280,7 @@ namespace Biletarnica.Services
             Console.WriteLine("1.Dodaj muzicki dogadjaj");
             Console.WriteLine("2.Dodaj sportski dogadjaj");
             Console.Write("Option:");
-            Int32.TryParse(Console.ReadLine(), out int option);
+            int.TryParse(Console.ReadLine(), out int option);
             switch (option)
             {
                 case 1:
@@ -308,7 +307,7 @@ namespace Biletarnica.Services
                     Console.Clear();
 
                     Console.Write("Unesite broj ulaznica:");
-                    Int32.TryParse(Console.ReadLine(), out int brojUlaznicaAdd);
+                    int.TryParse(Console.ReadLine(), out int brojUlaznicaAdd);
 
                     if (listaDogadjaja.Count == 0)
                     {
@@ -349,7 +348,7 @@ namespace Biletarnica.Services
                     Console.Clear();
 
                     Console.Write("Unesite broj ulaznica:");
-                    Int32.TryParse(Console.ReadLine(), out int brojUlaznicaAddd);
+                    int.TryParse(Console.ReadLine(), out int brojUlaznicaAddd);
 
                     Console.Clear();
 
